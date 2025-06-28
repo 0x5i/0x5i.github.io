@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arkian Car Show - Bali</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #111111;
+            --surface-color: #212121;
+            --primary-text: #f0f0f0;
+            --secondary-text: #c0c0c0;
+            --accent-color: #ff4500;
+            --border-color: #333333;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(180deg, var(--bg-color) 0%, #181818 100%);
+            color: var(--primary-text);
+            margin: 0;
+            padding: 1.5em;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            opacity: 0;
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+
+        .container {
+            max-width: 900px;
+            width: 95%;
+            background-color: var(--surface-color);
+            border-radius: 0.8em;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 0.5em 1.8em rgba(0, 0, 0, 0.6);
+            overflow: hidden;
+        }
+
+        header {
+            text-align: center;
+            padding: 2em 2.5em;
+            background: linear-gradient(135deg, #303030, #212121);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        header h1 {
+            font-size: 2.2em;
+            color: var(--accent-color);
+            margin: 0;
+            font-weight: 700;
+            text-shadow: 0 0 0.8em rgba(255, 69, 0, 0.6);
+        }
+
+        header p {
+            font-size: 1.1em;
+            color: var(--primary-text);
+            margin-top: 0.5em;
+            line-height: 1.5;
+        }
+
+        #countdown {
+            padding: 1.5em;
+            background-color: rgba(0,0,0,0.2);
+            text-align: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        #countdown h3 {
+            margin: 0 0 1em 0;
+            font-size: 1em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--secondary-text);
+        }
+
+        .timer {
+            display: flex;
+            justify-content: center;
+            gap: 1em;
+        }
+
+        .timer div {
+            background: var(--bg-color);
+            padding: 0.8em;
+            border-radius: 0.5em;
+            width: 80px;
+        }
+
+        .timer span {
+            display: block;
+            font-size: 2em;
+            font-weight: 700;
+            color: var(--accent-color);
+        }
+
+        .timer p {
+            margin: 0;
+            font-size: 0.8em;
+            text-transform: uppercase;
+        }
+
+        .event-info {
+            display: flex;
+            justify-content: space-around;
+            padding: 1.5em;
+            background-color: rgba(0,0,0,0.1);
+            text-align: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .info-block {
+            padding: 1em;
+        }
+
+        .info-block h3 {
+            margin: 0 0 0.3em 0;
+            font-size: 0.8em;
+            color: var(--secondary-text);
+            font-weight: 400;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .info-block p {
+            margin: 0;
+            font-size: 1.1em;
+            font-weight: 600;
+        }
+
+        .access-code {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: var(--bg-color);
+            padding: 0.4em 0.8em;
+            border-radius: 0.3em;
+            color: var(--accent-color);
+            border: 1px dashed var(--border-color);
+            letter-spacing: 0.05em;
+        }
+
+        main {
+            padding: 2em 2.5em;
+        }
+
+        .rundown-title {
+            text-align: center;
+            font-size: 1.6em;
+            font-weight: 600;
+            margin-bottom: 1.8em;
+            color: var(--primary-text);
+        }
+
+        .timeline {
+            list-style: none;
+            padding: 0;
+            position: relative;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 1em;
+            bottom: 0;
+            width: 0.15em;
+            background-color: var(--border-color);
+            border-radius: 0.1em;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 1.8em;
+            padding-left: 2.5em;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 0.6em;
+            top: 0.4em;
+            width: 0.8em;
+            height: 0.8em;
+            background-color: var(--surface-color);
+            border: 0.15em solid var(--accent-color);
+            border-radius: 50%;
+            z-index: 1;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .timeline-item:hover::before {
+            background-color: var(--accent-color);
+            transform: scale(1.1);
+        }
+
+        .timeline-time {
+            font-weight: 700;
+            font-size: 1.1em;
+            color: var(--accent-color);
+            margin-bottom: 0.3em;
+        }
+
+        .timeline-title {
+            font-weight: 600;
+            font-size: 1.2em;
+            margin: 0.3em 0;
+        }
+
+        .timeline-description {
+            color: var(--secondary-text);
+            line-height: 1.6;
+            font-size: 0.9em;
+        }
+
+        .highlight-item::before {
+            box-shadow: 0 0 0.5em var(--accent-color);
+            animation: pulse 1.5s infinite alternate;
+        }
+
+        @keyframes pulse {
+            to {
+                box-shadow: 0 0 1em var(--accent-color);
+            }
+        }
+
+        footer {
+            text-align: center;
+            padding: 2em 2.5em;
+            background: linear-gradient(135deg, #303030, #212121);
+            border-top: 1px solid var(--border-color);
+        }
+
+        footer h2 {
+            margin: 0 0 0.5em 0;
+            font-size: 1.3em;
+            font-weight: 700;
+        }
+
+        footer p {
+            margin: 0;
+            font-size: 1em;
+            color: var(--secondary-text);
+            line-height: 1.5;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8em;
+            }
+            header p {
+                font-size: 1em;
+            }
+            .event-info {
+                flex-direction: column;
+                gap: 1em;
+            }
+            .timeline::before {
+                left: 0.5em;
+            }
+            .timeline-item {
+                padding-left: 1.8em;
+            }
+            .timeline-item::before {
+                left: 0em;
+            }
+            .info-block {
+                padding: 0.8em;
+            }
+            main {
+                padding: 1.5em;
+            }
+            footer {
+                padding: 1.5em;
+            }
+        }
+
+        @media (max-width: 480px) {
+            header h1 {
+                font-size: 1.5em;
+            }
+            header p {
+                font-size: 0.9em;
+            }
+            .timer {
+                gap: 0.5em;
+            }
+            .timer div {
+                width: 60px;
+                padding: 0.5em;
+            }
+            .timer span {
+                font-size: 1.5em;
+            }
+            .info-block p {
+                font-size: 1em;
+            }
+            .access-code {
+                font-size: 0.9em;
+            }
+            .rundown-title {
+                font-size: 1.4em;
+            }
+            .timeline-time {
+                font-size: 1em;
+            }
+            .timeline-title {
+                font-size: 1.1em;
+            }
+            .timeline-description {
+                font-size: 0.85em;
+            }
+            footer h2 {
+                font-size: 1.2em;
+            }
+            footer p {
+                font-size: 0.9em;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>CAR SHOW: BALI</h1>
+            <p>Adu kreativitas mobil terbaik. Jumat, 4 Juli 2025.</p>
+        </header>
+
+        <section id="countdown">
+            <h3>ACARA DIMULAI DALAM</h3>
+            <div class="timer">
+                <div>
+                    <span id="days">0</span>
+                    <p>Hari</p>
+                </div>
+                <div>
+                    <span id="hours">0</span>
+                    <p>Jam</p>
+                </div>
+                <div>
+                    <span id="minutes">0</span>
+                    <p>Menit</p>
+                </div>
+                <div>
+                    <span id="seconds">0</span>
+                    <p>Detik</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="event-info">
+            <div class="info-block">
+                <h3>LOKASI</h3>
+                <p>BALI</p>
+            </div>
+            <div class="info-block">
+                <h3>KODE AKSES</h3>
+                <p class="access-code">443fe5770953135</p>
+            </div>
+        </section>
+
+        <main>
+            <h2 class="rundown-title">RUNDOWN MALAM PENUH GAYA ✨</h2>
+            <ul class="timeline">
+                <li class="timeline-item">
+                    <div class="timeline-time">20.00 WIB</div>
+                    <h3 class="timeline-title">Engines On!</h3>
+                    <p class="timeline-description">Merapat dan panaskan mesinmu! Kita berkumpul di Spawn sebagai titik awal invasi gaya kita.</p>
+                </li>
+                <li class="timeline-item">
+                    <div class="timeline-time">20.50 WIB</div>
+                    <h3 class="timeline-title">Convoy to The Glory!</h3>
+                    <p class="timeline-description">Konvoi bersama menuju venue utama! Tunjukkan kekompakan dan biarkan raungan mesinmu terdengar.</p>
+                </li>
+                <li class="timeline-item">
+                    <div class="timeline-time">21.00 WIB</div>
+                    <h3 class="timeline-title">Showtime!</h3>
+                    <p class="timeline-description">Lampu sorot menyala! Saatnya pamerkan kreasimu dan biarkan semua mata tertuju pada mobilmu.</p>
+                </li>
+                <li class="timeline-item">
+                    <div class="timeline-time">23.00 WIB</div>
+                    <h3 class="timeline-title">Flash & Victory! 📸</h3>
+                    <p class="timeline-description">Para pemenang akan diabadikan dalam sesi foto eksklusif dan foto bersama seluruh bintang malam ini.</p>
+                </li>
+                 <li class="timeline-item">
+                    <div class="timeline-time">23.30 WIB</div>
+                    <h3 class="timeline-title">Brotherhood Break!</h3>
+                    <p class="timeline-description">Waktunya bersantai! Bebas mau nongkrong, ngobrolin modifikasi, atau touring singkat menikmati suasana.</p>
+                </li>
+                <li class="timeline-item highlight-item">
+                    <div class="timeline-time">00.30 WIB</div>
+                    <h3 class="timeline-title">Crowning The King! 🏆</h3>
+                    <p class="timeline-description">Pengumuman mobil-mobil terbaik persembahan kizaca.garage! Siapakah yang akan membawa pulang gelar juara?</p>
+                </li>
+                <li class="timeline-item">
+                    <div class="timeline-time">01.00 WIB</div>
+                    <h3 class="timeline-title">Closing with Style</h3>
+                    <p class="timeline-description">Malam yang luar biasa akan ditutup. Terima kasih untuk semua yang telah berpartisipasi!</p>
+                </li>
+            </ul>
+        </main>
+
+        <footer>
+            <h2>Buktikan Mobilmu yang Terbaik!</h2>
+            <p>Sampai jumpa di sana, para legenda jalanan! 🔥👏🏻✨</p>
+        </footer>
+    </div>
+<script>
+    const countdownDate = new Date("Jul 4, 2025 20:00:00").getTime();
+
+    const x = setInterval(function() {
+        const now = new Date().getTime();
+        const distance = countdownDate - now;
+
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        document.getElementById("days").innerText = days;
+        document.getElementById("hours").innerText = hours;
+        document.getElementById("minutes").innerText = minutes;
+        document.getElementById("seconds").innerText = seconds;
+
+        if (distance < 0) {
+            clearInterval(x);
+            document.getElementById("countdown").innerHTML = "<h3>ACARA TELAH DIMULAI!</h3>";
+        }
+    }, 1000);
+</script>
+</body>
+  </html>
