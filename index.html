@@ -6,16 +6,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     :root {
-      --bg: #f2f4f7;
-      --card: #ffffff;
-      --text: #111827;
-      --button: #4F46E5;
-      --button-hover: #3730A3;
-      --table-border: #e5e7eb;
-      --th-bg: #f3f4f6;
-    }
-
-    body.dark {
       --bg: #0f172a;
       --card: #1e293b;
       --text: #f1f5f9;
@@ -23,12 +13,12 @@
       --button-hover: #818cf8;
       --table-border: #334155;
       --th-bg: #1e293b;
+      --highlight-bg: #10B981;
+      --highlight-text: #0f172a;
     }
-
     * {
       transition: all 0.3s ease;
     }
-
     body {
       font-family: 'Segoe UI', sans-serif;
       background: var(--bg);
@@ -37,46 +27,40 @@
       margin: 0;
       overflow-x: hidden;
     }
-
     .container {
       max-width: 600px;
       margin: auto;
       background: var(--card);
       padding: 24px;
       border-radius: 16px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
       animation: fadeIn 0.8s ease-in;
     }
-
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
     }
-
     h2 {
       text-align: center;
       margin-bottom: 20px;
       color: var(--text);
       font-size: 20px;
     }
-
     .form-group {
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
       margin-bottom: 20px;
     }
-
     input[type="number"] {
       flex: 1 1 60%;
       padding: 10px;
       font-size: 16px;
-      border: 1px solid #ccc;
+      border: 1px solid var(--table-border);
       border-radius: 8px;
       background: var(--bg);
       color: var(--text);
     }
-
     button {
       flex: 1 1 35%;
       padding: 10px;
@@ -87,69 +71,46 @@
       border-radius: 8px;
       cursor: pointer;
     }
-
     button:hover {
       background-color: var(--button-hover);
     }
-
     table {
       width: 100%;
       border-collapse: collapse;
       margin-top: 10px;
       font-size: 14px;
     }
-
     th, td {
-      padding: 8px;
+      padding: 12px 8px;
       border: 1px solid var(--table-border);
       text-align: center;
     }
-
     th {
-      background-color: var(--th-bg);
+      background-color: var(--bg);
       color: var(--text);
+      font-weight: bold;
     }
-
+    .balanced {
+      background-color: var(--highlight-bg) !important;
+      color: var(--highlight-text) !important;
+      font-weight: bold;
+    }
     .footer {
       text-align: center;
       margin-top: 30px;
       font-size: 14px;
       color: var(--text);
     }
-
     .footer span {
       color: red;
     }
-
-    .toggle-mode {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-
-    .toggle-mode button {
-      background: none;
-      border: 2px solid var(--button);
-      color: var(--button);
-      padding: 6px 12px;
-      font-weight: bold;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-
-    .toggle-mode button:hover {
-      background: var(--button);
-      color: white;
-    }
-
     @media (max-width: 480px) {
       h2 {
         font-size: 18px;
       }
-
       table, th, td {
         font-size: 13px;
       }
-
       input[type="number"], button {
         flex: 1 1 100%;
       }
@@ -158,23 +119,19 @@
 </head>
 <body>
   <div class="container">
-    <div class="toggle-mode">
-      <button onclick="toggleMode()">Ganti Mode</button>
-    </div>
     <h2>Kalkulator Boost</h2>
-    <p>Kalkulator ini berguna untuk mencari racikan boost twincharge hanya dengan memasukkan total boost yang dapat digunakan mobil di cdid ke form di bawah ini</p>
+    <p>Masukkan total boost (PSI) yang Anda inginkan. Kalkulator akan menampilkan semua kombinasi setelan Twin Turbo dan Supercharger untuk mencapai target tersebut.</p>
     <div class="form-group">
-      <input type="number" id="target" value="37" placeholder="Masukkan total PSI target">
-      <button onclick="cariKombinasi()">Cari</button>
+      <input type="number" id="target" value="37" placeholder="Masukkan total PSI">
+      <button onclick="cariKombinasi()">Cari Kombinasi</button>
     </div>
-
     <table id="hasil">
       <thead>
         <tr>
-          <th>Single Turbo</th>
-          <th>Twin Turbo</th>
-          <th>Supercharge</th>
-          <th>Total PSI</th>
+          <th>Setelan Twin Turbo</th>
+          <th>Boost dari Turbo</th>
+          <th>Setelan Supercharger</th>
+          <th>Total Boost</th>
         </tr>
       </thead>
       <tbody></tbody>
@@ -187,31 +144,35 @@
   <script>
     function cariKombinasi() {
       const target = parseInt(document.getElementById('target').value);
+      if (isNaN(target)) return;
+
       const b = 2;
       const maxSupercharge = 38;
       const tbody = document.getElementById('hasil').querySelector('tbody');
       tbody.innerHTML = '';
 
-      for (let twinturbo = 1; twinturbo <= target; twinturbo++) {
-        const twinX2 = twinturbo * b;
-        const supercharge = target - twinX2;
-        if (supercharge >= 0 && supercharge <= maxSupercharge) {
-          const row = `
-            <tr>
-              <td>${twinX2}</td>
-              <td>${twinturbo}</td>
-              <td>${supercharge}</td>
-              <td>${twinX2 + supercharge}</td>
-            </tr>`;
-          tbody.innerHTML += row;
+      for (let twinturbo_setting = 1; twinturbo_setting <= target; twinturbo_setting++) {
+        const turbo_boost = twinturbo_setting * b;
+        const supercharge_setting = target - turbo_boost;
+
+        if (supercharge_setting >= 0 && supercharge_setting <= maxSupercharge) {
+          const row = document.createElement('tr');
+          
+          row.innerHTML = `
+            <td>${twinturbo_setting}</td>
+            <td>${turbo_boost}</td>
+            <td>${supercharge_setting}</td>
+            <td>${turbo_boost + supercharge_setting}</td>
+          `;
+
+          if (Math.abs(turbo_boost - supercharge_setting) <= 5) {
+            row.classList.add('balanced');
+          }
+
+          tbody.appendChild(row);
         }
       }
     }
-
-    function toggleMode() {
-      document.body.classList.toggle('dark');
-    }
-
     window.onload = cariKombinasi;
   </script>
 </body>
